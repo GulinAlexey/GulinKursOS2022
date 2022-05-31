@@ -1,0 +1,2 @@
+C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\x64\Release\GulinKursOS2022.Form1.resources
+C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\x64\Release\GulinKursOS2022.vcxproj.GenerateResource.cache
