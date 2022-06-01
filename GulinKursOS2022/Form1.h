@@ -1,9 +1,13 @@
 #pragma once
 #include <msclr/marshal_cppstd.h>
+#include <ctime>
 #include "classes.h"
 
 #define TICK_TEXT (L"Прошло тиков : ")
 #define PROCS_TEXT (L"Процессы. Кол-во: ")
+#define NOT_FIND_PROC_TEXT_1 (L"Процесс с id = ")
+#define NOT_FIND_PROC_TEXT_2 (L" не найден. Задание \"")
+#define NOT_FIND_PROC_TEXT_3 (L"\" не добавлено.")
 
 int all_ticks = 0; //всего прошло тиков таймера
 
@@ -55,13 +59,13 @@ namespace GulinKursOS2022 {
 
 
 	private: System::Windows::Forms::Label^ queues_label;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ id_proc;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ name;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ owner_name;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ condition;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ queue_tasks;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ current_task;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ qty_tasks;
+
+
+
+
+
+
+
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ id_queue;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ id_owner;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ msgs;
@@ -91,11 +95,29 @@ namespace GulinKursOS2022 {
 	private: System::Windows::Forms::Label^ label5;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ name_proc_new;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ name_owner_new;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn1;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn4;
+
+
 	private: System::Windows::Forms::Button^ add_task_butt;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Label^ label6;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ id_proc_task_new;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ task_text_new;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ id_proc;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ name;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ owner_name;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ condition;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ queue_tasks;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ current_task;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ qty_tasks;
+
+
+
+
+
+
+
+
+
 
 
 
@@ -117,16 +139,11 @@ namespace GulinKursOS2022 {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
+			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle2 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Form1::typeid));
 			this->timer_exec = (gcnew System::Windows::Forms::Timer(this->components));
 			this->t_procs = (gcnew System::Windows::Forms::DataGridView());
-			this->id_proc = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->owner_name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->condition = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->queue_tasks = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->current_task = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->qty_tasks = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->procs_text = (gcnew System::Windows::Forms::Label());
 			this->t_queues = (gcnew System::Windows::Forms::DataGridView());
 			this->id_queue = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
@@ -147,12 +164,19 @@ namespace GulinKursOS2022 {
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->add_proc_butt = (gcnew System::Windows::Forms::Button());
 			this->t_tasks_new = (gcnew System::Windows::Forms::DataGridView());
-			this->dataGridViewTextBoxColumn1 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->dataGridViewTextBoxColumn4 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->id_proc_task_new = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->task_text_new = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->label5 = (gcnew System::Windows::Forms::Label());
 			this->add_task_butt = (gcnew System::Windows::Forms::Button());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->label6 = (gcnew System::Windows::Forms::Label());
+			this->qty_tasks = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->current_task = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->queue_tasks = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->condition = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->owner_name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->id_proc = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->t_procs))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->t_queues))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->t_procs_new))->BeginInit();
@@ -167,6 +191,7 @@ namespace GulinKursOS2022 {
 			// t_procs
 			// 
 			this->t_procs->AllowUserToAddRows = false;
+			this->t_procs->AutoSizeRowsMode = System::Windows::Forms::DataGridViewAutoSizeRowsMode::AllCells;
 			this->t_procs->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->t_procs->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(7) {
 				this->id_proc, this->name,
@@ -176,52 +201,10 @@ namespace GulinKursOS2022 {
 			this->t_procs->Name = L"t_procs";
 			this->t_procs->ReadOnly = true;
 			this->t_procs->RowHeadersVisible = false;
+			dataGridViewCellStyle1->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->t_procs->RowsDefaultCellStyle = dataGridViewCellStyle1;
 			this->t_procs->Size = System::Drawing::Size(903, 193);
 			this->t_procs->TabIndex = 0;
-			// 
-			// id_proc
-			// 
-			this->id_proc->HeaderText = L"ID";
-			this->id_proc->Name = L"id_proc";
-			this->id_proc->ReadOnly = true;
-			// 
-			// name
-			// 
-			this->name->HeaderText = L"Имя процесса";
-			this->name->Name = L"name";
-			this->name->ReadOnly = true;
-			// 
-			// owner_name
-			// 
-			this->owner_name->HeaderText = L"Имя владельца процесса ";
-			this->owner_name->Name = L"owner_name";
-			this->owner_name->ReadOnly = true;
-			// 
-			// condition
-			// 
-			this->condition->HeaderText = L"Состояние";
-			this->condition->Name = L"condition";
-			this->condition->ReadOnly = true;
-			// 
-			// queue_tasks
-			// 
-			this->queue_tasks->HeaderText = L"Очередь заданий";
-			this->queue_tasks->Name = L"queue_tasks";
-			this->queue_tasks->ReadOnly = true;
-			this->queue_tasks->Width = 200;
-			// 
-			// current_task
-			// 
-			this->current_task->HeaderText = L"Текущее задание";
-			this->current_task->Name = L"current_task";
-			this->current_task->ReadOnly = true;
-			this->current_task->Width = 200;
-			// 
-			// qty_tasks
-			// 
-			this->qty_tasks->HeaderText = L"Кол-во заданий (кроме текущего)";
-			this->qty_tasks->Name = L"qty_tasks";
-			this->qty_tasks->ReadOnly = true;
 			// 
 			// procs_text
 			// 
@@ -235,6 +218,7 @@ namespace GulinKursOS2022 {
 			// t_queues
 			// 
 			this->t_queues->AllowUserToAddRows = false;
+			this->t_queues->AutoSizeRowsMode = System::Windows::Forms::DataGridViewAutoSizeRowsMode::AllCells;
 			this->t_queues->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->t_queues->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(4) {
 				this->id_queue, this->id_owner,
@@ -244,6 +228,8 @@ namespace GulinKursOS2022 {
 			this->t_queues->Name = L"t_queues";
 			this->t_queues->ReadOnly = true;
 			this->t_queues->RowHeadersVisible = false;
+			dataGridViewCellStyle2->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->t_queues->RowsDefaultCellStyle = dataGridViewCellStyle2;
 			this->t_queues->Size = System::Drawing::Size(503, 188);
 			this->t_queues->TabIndex = 2;
 			// 
@@ -337,7 +323,7 @@ namespace GulinKursOS2022 {
 			this->log->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
 				| System::Windows::Forms::AnchorStyles::Left));
 			this->log->BackColor = System::Drawing::SystemColors::MenuText;
-			this->log->Font = (gcnew System::Drawing::Font(L"Consolas", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->log->Font = (gcnew System::Drawing::Font(L"Consolas", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->log->ForeColor = System::Drawing::SystemColors::Info;
 			this->log->Location = System::Drawing::Point(539, 254);
@@ -405,8 +391,8 @@ namespace GulinKursOS2022 {
 			this->t_tasks_new->AllowUserToAddRows = false;
 			this->t_tasks_new->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->t_tasks_new->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(2) {
-				this->dataGridViewTextBoxColumn1,
-					this->dataGridViewTextBoxColumn4
+				this->id_proc_task_new,
+					this->task_text_new
 			});
 			this->t_tasks_new->Location = System::Drawing::Point(15, 579);
 			this->t_tasks_new->Name = L"t_tasks_new";
@@ -414,15 +400,15 @@ namespace GulinKursOS2022 {
 			this->t_tasks_new->Size = System::Drawing::Size(204, 47);
 			this->t_tasks_new->TabIndex = 14;
 			// 
-			// dataGridViewTextBoxColumn1
+			// id_proc_task_new
 			// 
-			this->dataGridViewTextBoxColumn1->HeaderText = L"ID процесса";
-			this->dataGridViewTextBoxColumn1->Name = L"dataGridViewTextBoxColumn1";
+			this->id_proc_task_new->HeaderText = L"ID процесса";
+			this->id_proc_task_new->Name = L"id_proc_task_new";
 			// 
-			// dataGridViewTextBoxColumn4
+			// task_text_new
 			// 
-			this->dataGridViewTextBoxColumn4->HeaderText = L"Задание";
-			this->dataGridViewTextBoxColumn4->Name = L"dataGridViewTextBoxColumn4";
+			this->task_text_new->HeaderText = L"Задание";
+			this->task_text_new->Name = L"task_text_new";
 			// 
 			// label5
 			// 
@@ -460,6 +446,50 @@ namespace GulinKursOS2022 {
 			this->label6->Size = System::Drawing::Size(84, 13);
 			this->label6->TabIndex = 18;
 			this->label6->Text = L"АлтГТУ 2022 г.";
+			// 
+			// qty_tasks
+			// 
+			this->qty_tasks->HeaderText = L"Кол-во заданий (кроме текущего)";
+			this->qty_tasks->Name = L"qty_tasks";
+			this->qty_tasks->ReadOnly = true;
+			// 
+			// current_task
+			// 
+			this->current_task->HeaderText = L"Текущее задание";
+			this->current_task->Name = L"current_task";
+			this->current_task->ReadOnly = true;
+			this->current_task->Width = 200;
+			// 
+			// queue_tasks
+			// 
+			this->queue_tasks->HeaderText = L"Очередь заданий";
+			this->queue_tasks->Name = L"queue_tasks";
+			this->queue_tasks->ReadOnly = true;
+			this->queue_tasks->Width = 200;
+			// 
+			// condition
+			// 
+			this->condition->HeaderText = L"Состояние";
+			this->condition->Name = L"condition";
+			this->condition->ReadOnly = true;
+			// 
+			// owner_name
+			// 
+			this->owner_name->HeaderText = L"Имя владельца процесса ";
+			this->owner_name->Name = L"owner_name";
+			this->owner_name->ReadOnly = true;
+			// 
+			// name
+			// 
+			this->name->HeaderText = L"Имя процесса";
+			this->name->Name = L"name";
+			this->name->ReadOnly = true;
+			// 
+			// id_proc
+			// 
+			this->id_proc->HeaderText = L"ID";
+			this->id_proc->Name = L"id_proc";
+			this->id_proc->ReadOnly = true;
 			// 
 			// Form1
 			// 
@@ -502,6 +532,18 @@ namespace GulinKursOS2022 {
 
 		}
 #pragma endregion
+	public: System::String^ gettime(void) //вернуть полную строку даты и времени в соответствии с локалью
+	{
+			time_t now = time(0); //получить метку времени по Гринвичу
+			struct tm timeinfo;
+			localtime_s(&timeinfo, &now); //локализовать время
+			char* format = "%H:%M:%S ";
+			char buffer[80];
+			strftime(buffer, 80, format, &timeinfo); //вывести время по формату в буфер
+			string str_buffer(buffer); //переписать буфер в объект string
+
+			return gcnew System::String(str_buffer.c_str()); //и вернуть этот объект
+		}
 	public: void refresh_t_procs() //вывести в таблицу информацию о процессах
 	{
 		//обновить инфо в таблице
@@ -545,7 +587,7 @@ namespace GulinKursOS2022 {
 			for (int j = 0; j < procs.output(i)->get_qty_tasks(); j++)
 			{
 				string_ = procs.output(i)->get_task(j);
-				t_procs->Rows[i]->Cells[4]->Value += gcnew System::String(string_.c_str()) + L"\n";
+				t_procs->Rows[i]->Cells[4]->Value += gcnew System::String(string_.c_str()) + "\r\n";
 			}
 
 			string_ = procs.output(i)->get_current_task();
@@ -568,6 +610,7 @@ namespace GulinKursOS2022 {
 		for (int i = 0, j = 0; i < msgqs.get_qty(); i++)
 		{
 			t_queues->Rows[i]->Cells[0]->Value = msgqs.output(i)->get_id();
+			t_queues->Rows[i]->Cells[1]->Value = ;
 			///////////////////////////////////////
 
 		}
@@ -593,7 +636,18 @@ private: System::Void timer_exec_Tick(System::Object^ sender, System::EventArgs^
 	this->ticks_text->Text = TICK_TEXT + Convert::ToString(++all_ticks);
 }
 private: System::Void add_task_butt_Click(System::Object^ sender, System::EventArgs^ e) { //добавить задание
-	///////////////////////////////////////////////////
+	int int_id_proc_task_new = Convert::ToDouble((t_tasks_new->Rows[0]->Cells[0]->Value)->ToString());
+	string s_task_text_new = msclr::interop::marshal_as<std::string>((t_tasks_new->Rows[0]->Cells[1]->Value)->ToString());
+
+	Process *pr1 = procs.get_process(int_id_proc_task_new);
+	if (pr1 == NULL)
+	{
+		this->log->AppendText(gettime() + NOT_FIND_PROC_TEXT_1 + t_tasks_new->Rows[0]->Cells[0]->Value + NOT_FIND_PROC_TEXT_2 + t_tasks_new->Rows[0]->Cells[1]->Value + NOT_FIND_PROC_TEXT_3 + "\r\n");
+	}
+	else
+	{
+		pr1->add_task(s_task_text_new);
+	}
 }
 private: System::Void add_proc_butt_Click(System::Object^ sender, System::EventArgs^ e) { //добавить процесс
 	string s_name_proc_new = msclr::interop::marshal_as<std::string>((t_procs_new->Rows[0]->Cells[0]->Value)->ToString());

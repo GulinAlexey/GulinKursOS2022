@@ -1,4 +1,5 @@
 ﻿  Form1.cpp
-C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(550,48): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(627,48): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(634,27): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
   classes.obj : обнаружен модуль MSIL; для MSIL последовательная компоновка отключена; выполняется полная компоновка
   GulinKursOS2022.vcxproj -> C:\Users\Алексей\source\repos\GulinKursOS2022\x64\Release\GulinKursOS2022.exe

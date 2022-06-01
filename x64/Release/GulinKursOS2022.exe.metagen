@@ -18,4 +18,6 @@ Class GulinKursOS2022.Form1: AutoLayout, AnsiClass, Class, Public, BeforeFieldIn
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
+    gettime(): PrivateScope, Public, HideBySig
     refresh_t_procs(): PrivateScope, Public, HideBySig
+    refresh_t_queues(): PrivateScope, Public, HideBySig
