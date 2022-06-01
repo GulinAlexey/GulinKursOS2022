@@ -1,6 +1,4 @@
-﻿  classes.cpp
-  Form1.cpp
-  .NETFramework,Version=v4.7.2.AssemblyAttributes.cpp
-  Создание кода...
+﻿  Form1.cpp
+C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(550,48): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
   classes.obj : обнаружен модуль MSIL; для MSIL последовательная компоновка отключена; выполняется полная компоновка
   GulinKursOS2022.vcxproj -> C:\Users\Алексей\source\repos\GulinKursOS2022\x64\Release\GulinKursOS2022.exe

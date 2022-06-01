@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include "classes.h"
 
 //значение флагов состо€ни€ процесса
 #define GENERAT 0 //порождение
@@ -13,9 +12,12 @@
 
 using namespace std;
 
-int last_id_proc = 0; //последний задействованный уникальный id процесса
-int last_id_msg = 0; //последний задействованный уникальный id сообщени€
-int last_id_queue = 0; //последний задействованный уникальный id очереди
+//глобальные переменные и объекты
+extern class Set_of_processes procs;
+extern class Set_of_msg_queues msgqs;
+
+extern int last_id_proc; //последний задействованный уникальный id процесса
+extern int last_id_msg; //последний задействованный уникальный id сообщени€
 
 class Process; //процесс
 class Msg; //cообщение
@@ -32,12 +34,30 @@ private:
 	int f_condition; //флаг состо€ни€ процесса (порождение процесса, готовность, выполнение, ожидание, удаление процесса)
 	string* queue_tasks; //очередь заданий
 	string current_task; //текущее выполн€емое задание
-	int qty_tasks; //кол-во заданий
+	int qty_tasks; //кол-во заданий (кроме текущего)
 
 private:
-	void delete_task(int number) //удалить задание с выбранным индексом из очереди
+	bool delete_task(int number) //удалить задание с выбранным индексом из очереди
 	{
+		qty_tasks--;
+		string* tasks_new = NULL;
+		if (qty_tasks > 0)
+		{
+			tasks_new = new string[qty_tasks];
 
+			for (int i = 0, j = 0; j < qty_tasks + 1; j++)
+			{
+				if (j != number)
+				{
+					tasks_new[i] = queue_tasks[j];
+					i++;
+				}
+			}
+		}
+
+		delete[] queue_tasks;
+		queue_tasks = tasks_new;
+		return true;
 	}
 public:
 	Process(int id_input, int name_input, string owner_name_input, int f_condition_input) //конструктор
@@ -156,6 +176,21 @@ public:
 	int get_f_condition()
 	{
 		return f_condition;
+	}
+	
+	int get_qty_tasks()
+	{
+		return qty_tasks;
+	}
+
+	string get_task(int number)
+	{
+		return queue_tasks[number];
+	}
+
+	string get_current_task()
+	{
+		return current_task;
 	}
 };
 
@@ -404,7 +439,7 @@ public:
 		processes = NULL;
 	}
 
-	void add(int id_input, string name_input, string owner_name_input) //создать процесс (состо€ние процесса Ц Ђпорождениеї, очередь заданий пуста€, кол-во заданий равно нулю)
+	void add(string name_input, string owner_name_input) //создать процесс (состо€ние процесса Ц Ђпорождениеї, очередь заданий пуста€, кол-во заданий равно нулю)
 	{
 		Process* processes_new = new Process[qty_processes + 1];
 		for (int i = 0; i < qty_processes; i++)
