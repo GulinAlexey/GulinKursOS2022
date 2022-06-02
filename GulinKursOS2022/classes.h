@@ -36,29 +36,6 @@ private:
 	string current_task; //текущее выполняемое задание
 	int qty_tasks; //кол-во заданий (кроме текущего)
 
-private:
-	bool delete_task(int number) //удалить задание с выбранным индексом из очереди
-	{
-		qty_tasks--;
-		string* tasks_new = NULL;
-		if (qty_tasks > 0)
-		{
-			tasks_new = new string[qty_tasks];
-
-			for (int i = 0, j = 0; j < qty_tasks + 1; j++)
-			{
-				if (j != number)
-				{
-					tasks_new[i] = queue_tasks[j];
-					i++;
-				}
-			}
-		}
-
-		delete[] queue_tasks;
-		queue_tasks = tasks_new;
-		return true;
-	}
 public:
 	Process(int id_input, int name_input, string owner_name_input, int f_condition_input) //конструктор
 	{
@@ -80,6 +57,7 @@ public:
 		current_task = "";
 		qty_tasks = 0;
 	}
+
 	void init(int id_input, string name_input, string owner_name_input, int f_condition_input)
 	{
 		id = id_input;
@@ -117,6 +95,49 @@ public:
 
 		delete[] queue_tasks;
 		queue_tasks = tasks_new;
+	}
+
+	bool to_next_task() //перейти к следующему заданию (перенести задание из начала очереди в переменную с текущим заданием)
+	{
+		if (qty_tasks == 0)
+		{
+			current_task = "";
+			return false;
+		}
+		else
+		{
+			current_task = queue_tasks[0];
+			delete_task(0);
+			return true;
+		}
+	}
+
+	bool delete_task(int number) //удалить задание с выбранным индексом из очереди
+	{
+		if (number > 0 && number <= qty_tasks)
+		{
+			qty_tasks--;
+			string* tasks_new = NULL;
+			if (qty_tasks > 0)
+			{
+				tasks_new = new string[qty_tasks];
+
+				for (int i = 0, j = 0; j < qty_tasks + 1; j++)
+				{
+					if (j != number - 1)
+					{
+						tasks_new[i] = queue_tasks[j];
+						i++;
+					}
+				}
+			}
+
+			delete[] queue_tasks;
+			queue_tasks = tasks_new;
+			return true;
+		}
+		else
+			return false;
 	}
 
 	string exec() //выполнение в зависимости от состояния (возвращается инфо о результате выполнения)
@@ -288,6 +309,7 @@ public:
 		msgs = NULL;
 		qty_msgs = 0;
 	}
+
 
 	void init(int id_input, int id_owner_input)
 	{

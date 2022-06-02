@@ -5,9 +5,17 @@
 
 #define TICK_TEXT (L"Прошло тиков : ")
 #define PROCS_TEXT (L"Процессы. Кол-во: ")
+#define QUEUES_TEXT (L"Очереди сообщений. Кол-во: ")
 #define NOT_FIND_PROC_TEXT_1 (L"Процесс с id = ")
 #define NOT_FIND_PROC_TEXT_2 (L" не найден. Задание \"")
 #define NOT_FIND_PROC_TEXT_3 (L"\" не добавлено.")
+#define DEL_PROC_TEXT_1 (L"Процесс с id = ")
+#define DEL_PROC_TEXT_2 (L" успешно удалён.")
+#define DEL_PROC_TEXT_2_2 (L" не найден. Ничего не удалено.")
+#define DEL_TASK_TEXT_1 (L"Задание №")
+#define DEL_TASK_TEXT_2 (L" процесса с id = ")
+#define DEL_TASK_TEXT_3 (L" успешно удалено.")
+#define DEL_TASK_TEXT_3_2 (L" не было найдено. Ничего не удалено.")
 
 int all_ticks = 0; //всего прошло тиков таймера
 
@@ -50,6 +58,7 @@ namespace GulinKursOS2022 {
 	private: System::Windows::Forms::Label^ procs_text;
 
 	private: System::Windows::Forms::DataGridView^ t_queues;
+	private: System::Windows::Forms::Label^ queues_text;
 
 
 
@@ -58,7 +67,7 @@ namespace GulinKursOS2022 {
 
 
 
-	private: System::Windows::Forms::Label^ queues_label;
+
 
 
 
@@ -109,6 +118,18 @@ namespace GulinKursOS2022 {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ queue_tasks;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ current_task;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ qty_tasks;
+	private: System::Windows::Forms::Label^ label7;
+	private: System::Windows::Forms::TextBox^ id_proc_del_text;
+	private: System::Windows::Forms::Button^ ok_del_proc;
+	private: System::Windows::Forms::Button^ ok_del_task;
+
+	private: System::Windows::Forms::TextBox^ task_del_text;
+
+	private: System::Windows::Forms::Label^ label8;
+	private: System::Windows::Forms::Label^ label9;
+	private: System::Windows::Forms::GroupBox^ groupBox1;
+	private: System::Windows::Forms::RadioButton^ task_to_end;
+	private: System::Windows::Forms::RadioButton^ task_to_begin;
 
 
 
@@ -144,13 +165,20 @@ namespace GulinKursOS2022 {
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Form1::typeid));
 			this->timer_exec = (gcnew System::Windows::Forms::Timer(this->components));
 			this->t_procs = (gcnew System::Windows::Forms::DataGridView());
+			this->id_proc = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->owner_name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->condition = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->queue_tasks = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->current_task = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->qty_tasks = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->procs_text = (gcnew System::Windows::Forms::Label());
 			this->t_queues = (gcnew System::Windows::Forms::DataGridView());
 			this->id_queue = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->id_owner = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->msgs = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->qty_msgs = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->queues_label = (gcnew System::Windows::Forms::Label());
+			this->queues_text = (gcnew System::Windows::Forms::Label());
 			this->interval_text = (gcnew System::Windows::Forms::TextBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->start = (gcnew System::Windows::Forms::Button());
@@ -170,17 +198,21 @@ namespace GulinKursOS2022 {
 			this->add_task_butt = (gcnew System::Windows::Forms::Button());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->label6 = (gcnew System::Windows::Forms::Label());
-			this->qty_tasks = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->current_task = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->queue_tasks = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->condition = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->owner_name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->id_proc = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->label7 = (gcnew System::Windows::Forms::Label());
+			this->id_proc_del_text = (gcnew System::Windows::Forms::TextBox());
+			this->ok_del_proc = (gcnew System::Windows::Forms::Button());
+			this->ok_del_task = (gcnew System::Windows::Forms::Button());
+			this->task_del_text = (gcnew System::Windows::Forms::TextBox());
+			this->label8 = (gcnew System::Windows::Forms::Label());
+			this->label9 = (gcnew System::Windows::Forms::Label());
+			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
+			this->task_to_end = (gcnew System::Windows::Forms::RadioButton());
+			this->task_to_begin = (gcnew System::Windows::Forms::RadioButton());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->t_procs))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->t_queues))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->t_procs_new))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->t_tasks_new))->BeginInit();
+			this->groupBox1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// timer_exec
@@ -205,6 +237,50 @@ namespace GulinKursOS2022 {
 			this->t_procs->RowsDefaultCellStyle = dataGridViewCellStyle1;
 			this->t_procs->Size = System::Drawing::Size(903, 193);
 			this->t_procs->TabIndex = 0;
+			// 
+			// id_proc
+			// 
+			this->id_proc->HeaderText = L"ID";
+			this->id_proc->Name = L"id_proc";
+			this->id_proc->ReadOnly = true;
+			// 
+			// name
+			// 
+			this->name->HeaderText = L"Имя процесса";
+			this->name->Name = L"name";
+			this->name->ReadOnly = true;
+			// 
+			// owner_name
+			// 
+			this->owner_name->HeaderText = L"Имя владельца процесса ";
+			this->owner_name->Name = L"owner_name";
+			this->owner_name->ReadOnly = true;
+			// 
+			// condition
+			// 
+			this->condition->HeaderText = L"Состояние";
+			this->condition->Name = L"condition";
+			this->condition->ReadOnly = true;
+			// 
+			// queue_tasks
+			// 
+			this->queue_tasks->HeaderText = L"Очередь заданий";
+			this->queue_tasks->Name = L"queue_tasks";
+			this->queue_tasks->ReadOnly = true;
+			this->queue_tasks->Width = 200;
+			// 
+			// current_task
+			// 
+			this->current_task->HeaderText = L"Текущее задание";
+			this->current_task->Name = L"current_task";
+			this->current_task->ReadOnly = true;
+			this->current_task->Width = 200;
+			// 
+			// qty_tasks
+			// 
+			this->qty_tasks->HeaderText = L"Кол-во заданий (кроме текущего)";
+			this->qty_tasks->Name = L"qty_tasks";
+			this->qty_tasks->ReadOnly = true;
 			// 
 			// procs_text
 			// 
@@ -258,14 +334,14 @@ namespace GulinKursOS2022 {
 			this->qty_msgs->Name = L"qty_msgs";
 			this->qty_msgs->ReadOnly = true;
 			// 
-			// queues_label
+			// queues_text
 			// 
-			this->queues_label->AutoSize = true;
-			this->queues_label->Location = System::Drawing::Point(12, 238);
-			this->queues_label->Name = L"queues_label";
-			this->queues_label->Size = System::Drawing::Size(162, 13);
-			this->queues_label->TabIndex = 3;
-			this->queues_label->Text = L"Очереди сообщений. Кол-во: 0";
+			this->queues_text->AutoSize = true;
+			this->queues_text->Location = System::Drawing::Point(12, 238);
+			this->queues_text->Name = L"queues_text";
+			this->queues_text->Size = System::Drawing::Size(162, 13);
+			this->queues_text->TabIndex = 3;
+			this->queues_text->Text = L"Очереди сообщений. Кол-во: 0";
 			// 
 			// interval_text
 			// 
@@ -339,9 +415,9 @@ namespace GulinKursOS2022 {
 			this->label3->AutoSize = true;
 			this->label3->Location = System::Drawing::Point(536, 238);
 			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(123, 13);
+			this->label3->Size = System::Drawing::Size(66, 13);
 			this->label3->TabIndex = 10;
-			this->label3->Text = L"Лог работы процессов";
+			this->label3->Text = L"Лог работы";
 			// 
 			// t_procs_new
 			// 
@@ -421,7 +497,7 @@ namespace GulinKursOS2022 {
 			// 
 			// add_task_butt
 			// 
-			this->add_task_butt->Location = System::Drawing::Point(225, 603);
+			this->add_task_butt->Location = System::Drawing::Point(225, 604);
 			this->add_task_butt->Name = L"add_task_butt";
 			this->add_task_butt->Size = System::Drawing::Size(75, 23);
 			this->add_task_butt->TabIndex = 16;
@@ -431,6 +507,7 @@ namespace GulinKursOS2022 {
 			// 
 			// label1
 			// 
+			this->label1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
 			this->label1->AutoSize = true;
 			this->label1->Location = System::Drawing::Point(1028, 600);
 			this->label1->Name = L"label1";
@@ -440,6 +517,7 @@ namespace GulinKursOS2022 {
 			// 
 			// label6
 			// 
+			this->label6->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
 			this->label6->AutoSize = true;
 			this->label6->Location = System::Drawing::Point(1063, 617);
 			this->label6->Name = L"label6";
@@ -447,49 +525,99 @@ namespace GulinKursOS2022 {
 			this->label6->TabIndex = 18;
 			this->label6->Text = L"АлтГТУ 2022 г.";
 			// 
-			// qty_tasks
+			// label7
 			// 
-			this->qty_tasks->HeaderText = L"Кол-во заданий (кроме текущего)";
-			this->qty_tasks->Name = L"qty_tasks";
-			this->qty_tasks->ReadOnly = true;
+			this->label7->AutoSize = true;
+			this->label7->Location = System::Drawing::Point(924, 128);
+			this->label7->Name = L"label7";
+			this->label7->Size = System::Drawing::Size(140, 13);
+			this->label7->TabIndex = 19;
+			this->label7->Text = L"ID процесса для удаления";
 			// 
-			// current_task
+			// id_proc_del_text
 			// 
-			this->current_task->HeaderText = L"Текущее задание";
-			this->current_task->Name = L"current_task";
-			this->current_task->ReadOnly = true;
-			this->current_task->Width = 200;
+			this->id_proc_del_text->Location = System::Drawing::Point(940, 144);
+			this->id_proc_del_text->Name = L"id_proc_del_text";
+			this->id_proc_del_text->Size = System::Drawing::Size(100, 20);
+			this->id_proc_del_text->TabIndex = 20;
+			this->id_proc_del_text->Text = L"0";
 			// 
-			// queue_tasks
+			// ok_del_proc
 			// 
-			this->queue_tasks->HeaderText = L"Очередь заданий";
-			this->queue_tasks->Name = L"queue_tasks";
-			this->queue_tasks->ReadOnly = true;
-			this->queue_tasks->Width = 200;
+			this->ok_del_proc->Location = System::Drawing::Point(1050, 142);
+			this->ok_del_proc->Name = L"ok_del_proc";
+			this->ok_del_proc->Size = System::Drawing::Size(75, 23);
+			this->ok_del_proc->TabIndex = 21;
+			this->ok_del_proc->Text = L"Удалить";
+			this->ok_del_proc->UseVisualStyleBackColor = true;
+			this->ok_del_proc->Click += gcnew System::EventHandler(this, &Form1::ok_del_proc_Click);
 			// 
-			// condition
+			// ok_del_task
 			// 
-			this->condition->HeaderText = L"Состояние";
-			this->condition->Name = L"condition";
-			this->condition->ReadOnly = true;
+			this->ok_del_task->Location = System::Drawing::Point(1050, 193);
+			this->ok_del_task->Name = L"ok_del_task";
+			this->ok_del_task->Size = System::Drawing::Size(75, 23);
+			this->ok_del_task->TabIndex = 24;
+			this->ok_del_task->Text = L"Удалить";
+			this->ok_del_task->UseVisualStyleBackColor = true;
+			this->ok_del_task->Click += gcnew System::EventHandler(this, &Form1::ok_del_task_Click);
 			// 
-			// owner_name
+			// task_del_text
 			// 
-			this->owner_name->HeaderText = L"Имя владельца процесса ";
-			this->owner_name->Name = L"owner_name";
-			this->owner_name->ReadOnly = true;
+			this->task_del_text->Location = System::Drawing::Point(940, 195);
+			this->task_del_text->Name = L"task_del_text";
+			this->task_del_text->Size = System::Drawing::Size(100, 20);
+			this->task_del_text->TabIndex = 23;
+			this->task_del_text->Text = L"0";
 			// 
-			// name
+			// label8
 			// 
-			this->name->HeaderText = L"Имя процесса";
-			this->name->Name = L"name";
-			this->name->ReadOnly = true;
+			this->label8->AutoSize = true;
+			this->label8->Location = System::Drawing::Point(924, 179);
+			this->label8->Name = L"label8";
+			this->label8->Size = System::Drawing::Size(188, 13);
+			this->label8->TabIndex = 22;
+			this->label8->Text = L"Индекс задания для удаления (>=1)";
 			// 
-			// id_proc
+			// label9
 			// 
-			this->id_proc->HeaderText = L"ID";
-			this->id_proc->Name = L"id_proc";
-			this->id_proc->ReadOnly = true;
+			this->label9->Location = System::Drawing::Point(924, 219);
+			this->label9->Name = L"label9";
+			this->label9->Size = System::Drawing::Size(217, 32);
+			this->label9->TabIndex = 25;
+			this->label9->Text = L"Для удаления задания также требуется ввести ID его процесса в поле выше.";
+			// 
+			// groupBox1
+			// 
+			this->groupBox1->Controls->Add(this->task_to_end);
+			this->groupBox1->Controls->Add(this->task_to_begin);
+			this->groupBox1->Location = System::Drawing::Point(225, 563);
+			this->groupBox1->Name = L"groupBox1";
+			this->groupBox1->Size = System::Drawing::Size(238, 35);
+			this->groupBox1->TabIndex = 26;
+			this->groupBox1->TabStop = false;
+			// 
+			// task_to_end
+			// 
+			this->task_to_end->AutoSize = true;
+			this->task_to_end->Checked = true;
+			this->task_to_end->Location = System::Drawing::Point(6, 12);
+			this->task_to_end->Name = L"task_to_end";
+			this->task_to_end->Size = System::Drawing::Size(109, 17);
+			this->task_to_end->TabIndex = 27;
+			this->task_to_end->TabStop = true;
+			this->task_to_end->Text = L"В конец очереди";
+			this->task_to_end->UseVisualStyleBackColor = true;
+			// 
+			// task_to_begin
+			// 
+			this->task_to_begin->AutoSize = true;
+			this->task_to_begin->Location = System::Drawing::Point(121, 12);
+			this->task_to_begin->Name = L"task_to_begin";
+			this->task_to_begin->Size = System::Drawing::Size(114, 17);
+			this->task_to_begin->TabIndex = 28;
+			this->task_to_begin->Text = L"В начало очереди";
+			this->task_to_begin->UseVisualStyleBackColor = true;
 			// 
 			// Form1
 			// 
@@ -497,6 +625,14 @@ namespace GulinKursOS2022 {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoScroll = true;
 			this->ClientSize = System::Drawing::Size(1153, 639);
+			this->Controls->Add(this->groupBox1);
+			this->Controls->Add(this->label9);
+			this->Controls->Add(this->ok_del_task);
+			this->Controls->Add(this->task_del_text);
+			this->Controls->Add(this->label8);
+			this->Controls->Add(this->ok_del_proc);
+			this->Controls->Add(this->id_proc_del_text);
+			this->Controls->Add(this->label7);
 			this->Controls->Add(this->label6);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->add_task_butt);
@@ -512,7 +648,7 @@ namespace GulinKursOS2022 {
 			this->Controls->Add(this->start);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->interval_text);
-			this->Controls->Add(this->queues_label);
+			this->Controls->Add(this->queues_text);
 			this->Controls->Add(this->t_queues);
 			this->Controls->Add(this->procs_text);
 			this->Controls->Add(this->t_procs);
@@ -527,11 +663,18 @@ namespace GulinKursOS2022 {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->t_queues))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->t_procs_new))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->t_tasks_new))->EndInit();
+			this->groupBox1->ResumeLayout(false);
+			this->groupBox1->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
 		}
 #pragma endregion
+	public: void exec_procs() //выполнение работы процессов и вывод хода работы в лог
+	{
+
+	}
+
 	public: System::String^ gettime(void) //вернуть полную строку даты и времени в соответствии с локалью
 	{
 			time_t now = time(0); //получить метку времени по Гринвичу
@@ -609,11 +752,19 @@ namespace GulinKursOS2022 {
 
 		for (int i = 0, j = 0; i < msgqs.get_qty(); i++)
 		{
-			t_queues->Rows[i]->Cells[0]->Value = msgqs.output(i)->get_id();
-			t_queues->Rows[i]->Cells[1]->Value = ;
-			///////////////////////////////////////
+			t_queues->Rows[i]->Cells[0]->Value = Convert::ToString(msgqs.output(i)->get_id());
+			t_queues->Rows[i]->Cells[1]->Value = Convert::ToString(msgqs.output(i) ->get_id_owner());
+			for (int j=0; j < msgqs.output(i)->get_qty(); j++)
+			{
+				string string_ = (msgqs.output(i) ->output(j))->get_data();
+				t_queues->Rows[i]->Cells[2]->Value += L"ID: " + Convert::ToString((msgqs.output(i)->output(j))->get_id()) + L", тип: " + Convert::ToString((msgqs.output(i)->output(j))->get_type()) + L", текст: \"" + gcnew System::String(string_.c_str()) + "\", ID proc sender: " + Convert::ToString((msgqs.output(i)->output(j))->get_id_sender()) + "\r\n";
+			}
+
+			t_queues->Rows[i]->Cells[3]->Value = Convert::ToString(msgqs.output(i)->get_qty());
 
 		}
+
+		this->queues_text->Text = QUEUES_TEXT + Convert::ToString(msgqs.get_qty());
 	}
 
 	private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e) {
@@ -623,7 +774,7 @@ namespace GulinKursOS2022 {
 
 		t_tasks_new->Rows->Add();
 		t_tasks_new->Rows[0]->Cells[0]->Value = "0";
-		t_tasks_new->Rows[0]->Cells[1]->Value = "s ";
+		t_tasks_new->Rows[0]->Cells[1]->Value = "";
 	}
 private: System::Void pause_Click(System::Object^ sender, System::EventArgs^ e) { //пауза таймера
 	this->timer_exec->Enabled = false;
@@ -646,7 +797,17 @@ private: System::Void add_task_butt_Click(System::Object^ sender, System::EventA
 	}
 	else
 	{
-		pr1->add_task(s_task_text_new);
+		if (this->task_to_end->Checked == true)
+		{
+			pr1->add_task(s_task_text_new);
+		}
+		else
+		{
+			pr1->add_task_to_top(s_task_text_new);
+		}
+		t_tasks_new->Rows[0]->Cells[1]->Value = "";
+
+		refresh_t_procs();
 	}
 }
 private: System::Void add_proc_butt_Click(System::Object^ sender, System::EventArgs^ e) { //добавить процесс
@@ -654,8 +815,41 @@ private: System::Void add_proc_butt_Click(System::Object^ sender, System::EventA
 	string s_name_owner_new = msclr::interop::marshal_as<std::string>((t_procs_new->Rows[0]->Cells[1]->Value)->ToString());
 
 	procs.add(s_name_proc_new, s_name_owner_new);
+	t_procs_new->Rows[0]->Cells[0]->Value = "proc";
 
 	refresh_t_procs();
+}
+private: System::Void ok_del_proc_Click(System::Object^ sender, System::EventArgs^ e) {
+	if (procs.del(Convert::ToDouble(this->id_proc_del_text->Text)) == true)
+	{
+		this->log->AppendText(gettime() + DEL_PROC_TEXT_1 + Convert::ToDouble(this->id_proc_del_text->Text) + DEL_PROC_TEXT_2  + "\r\n");
+		this->id_proc_del_text->Text = L"0";
+
+		refresh_t_procs();
+	}
+	else
+	{
+		this->log->AppendText(gettime() + DEL_PROC_TEXT_1 + Convert::ToDouble(this->id_proc_del_text->Text) + DEL_PROC_TEXT_2_2 + "\r\n");
+	}
+}
+private: System::Void ok_del_task_Click(System::Object^ sender, System::EventArgs^ e) {
+	int f_success = 0;
+	if (procs.get_process(Convert::ToDouble(this->id_proc_del_text->Text)) != NULL)
+	{
+		if (procs.get_process(Convert::ToDouble(this->id_proc_del_text->Text))->delete_task(Convert::ToDouble(this->task_del_text->Text)) == true)
+		{
+			f_success = 1;
+			this->log->AppendText(gettime() + DEL_TASK_TEXT_1 + Convert::ToDouble(this->task_del_text->Text) + DEL_TASK_TEXT_2 + Convert::ToDouble(this->id_proc_del_text->Text) + DEL_TASK_TEXT_3 + "\r\n");
+
+			this->task_del_text->Text = L"0";
+
+			refresh_t_procs();
+		}
+	}
+	if (f_success == 0)
+	{
+		this->log->AppendText(gettime() + DEL_TASK_TEXT_1 + Convert::ToDouble(this->task_del_text->Text) + DEL_TASK_TEXT_2 + Convert::ToDouble(this->id_proc_del_text->Text) + DEL_TASK_TEXT_3_2 + "\r\n");
+	}
 }
 }
 	;
