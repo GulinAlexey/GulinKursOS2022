@@ -1,9 +1,10 @@
 ﻿  Form1.cpp
-C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(779,48): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
-C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(786,27): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
-C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(819,33): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
-C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(833,41): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
-C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(835,42): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
-C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(835,104): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(876,48): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(898,27): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(931,33): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(945,41): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(947,42): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\Form1.h(947,104): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\Алексей\source\repos\GulinKursOS2022\GulinKursOS2022\classes.h(679): warning C4715: Process::exec: значение возвращается не при всех путях выполнения
   classes.obj : обнаружен модуль MSIL; для MSIL последовательная компоновка отключена; выполняется полная компоновка
   GulinKursOS2022.vcxproj -> C:\Users\Алексей\source\repos\GulinKursOS2022\x64\Release\GulinKursOS2022.exe

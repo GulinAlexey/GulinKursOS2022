@@ -18,6 +18,7 @@
 #define DEL_TASK_TEXT_3_2 (L" не было найдено. Ничего не удалено.")
 
 int all_ticks = 0; //всего прошло тиков таймера
+int i_current_proc = 0; //текущий выполняемый процесс (за 1 тик таймера выполняется только 1 итерация 1 процесса)
 
 namespace GulinKursOS2022 {
 
@@ -75,10 +76,10 @@ namespace GulinKursOS2022 {
 
 
 
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ id_queue;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ id_owner;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ msgs;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ qty_msgs;
+
+
+
+
 	private: System::Windows::Forms::TextBox^ interval_text;
 
 	private: System::Windows::Forms::Label^ label2;
@@ -111,13 +112,13 @@ namespace GulinKursOS2022 {
 	private: System::Windows::Forms::Label^ label6;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ id_proc_task_new;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ task_text_new;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ id_proc;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ name;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ owner_name;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ condition;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ queue_tasks;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ current_task;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ qty_tasks;
+
+
+
+
+
+
+
 	private: System::Windows::Forms::Label^ label7;
 	private: System::Windows::Forms::TextBox^ id_proc_del_text;
 	private: System::Windows::Forms::Button^ ok_del_proc;
@@ -130,6 +131,27 @@ namespace GulinKursOS2022 {
 	private: System::Windows::Forms::GroupBox^ groupBox1;
 	private: System::Windows::Forms::RadioButton^ task_to_end;
 	private: System::Windows::Forms::RadioButton^ task_to_begin;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ id_queue;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ id_owner;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ msgs;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ qty_msgs;
+
+
+
+
+
+
+
+
+private: System::Windows::Forms::Label^ label10;
+private: System::Windows::Forms::DataGridViewTextBoxColumn^ id_proc;
+private: System::Windows::Forms::DataGridViewTextBoxColumn^ name;
+private: System::Windows::Forms::DataGridViewTextBoxColumn^ owner_name;
+private: System::Windows::Forms::DataGridViewTextBoxColumn^ condition;
+private: System::Windows::Forms::DataGridViewTextBoxColumn^ queue_tasks;
+private: System::Windows::Forms::DataGridViewTextBoxColumn^ current_task;
+private: System::Windows::Forms::DataGridViewTextBoxColumn^ qty_tasks;
+private: System::Windows::Forms::DataGridViewTextBoxColumn^ last_msg;
 
 
 
@@ -160,8 +182,8 @@ namespace GulinKursOS2022 {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
-			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle2 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle5 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle6 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Form1::typeid));
 			this->timer_exec = (gcnew System::Windows::Forms::Timer(this->components));
 			this->t_procs = (gcnew System::Windows::Forms::DataGridView());
@@ -172,6 +194,7 @@ namespace GulinKursOS2022 {
 			this->queue_tasks = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->current_task = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->qty_tasks = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->last_msg = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->procs_text = (gcnew System::Windows::Forms::Label());
 			this->t_queues = (gcnew System::Windows::Forms::DataGridView());
 			this->id_queue = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
@@ -208,6 +231,7 @@ namespace GulinKursOS2022 {
 			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
 			this->task_to_end = (gcnew System::Windows::Forms::RadioButton());
 			this->task_to_begin = (gcnew System::Windows::Forms::RadioButton());
+			this->label10 = (gcnew System::Windows::Forms::Label());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->t_procs))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->t_queues))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->t_procs_new))->BeginInit();
@@ -223,18 +247,20 @@ namespace GulinKursOS2022 {
 			// t_procs
 			// 
 			this->t_procs->AllowUserToAddRows = false;
+			this->t_procs->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
+				| System::Windows::Forms::AnchorStyles::Left));
 			this->t_procs->AutoSizeRowsMode = System::Windows::Forms::DataGridViewAutoSizeRowsMode::AllCells;
 			this->t_procs->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->t_procs->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(7) {
+			this->t_procs->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(8) {
 				this->id_proc, this->name,
-					this->owner_name, this->condition, this->queue_tasks, this->current_task, this->qty_tasks
+					this->owner_name, this->condition, this->queue_tasks, this->current_task, this->qty_tasks, this->last_msg
 			});
 			this->t_procs->Location = System::Drawing::Point(15, 25);
 			this->t_procs->Name = L"t_procs";
 			this->t_procs->ReadOnly = true;
 			this->t_procs->RowHeadersVisible = false;
-			dataGridViewCellStyle1->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->t_procs->RowsDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle5->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->t_procs->RowsDefaultCellStyle = dataGridViewCellStyle5;
 			this->t_procs->Size = System::Drawing::Size(903, 193);
 			this->t_procs->TabIndex = 0;
 			// 
@@ -243,6 +269,7 @@ namespace GulinKursOS2022 {
 			this->id_proc->HeaderText = L"ID";
 			this->id_proc->Name = L"id_proc";
 			this->id_proc->ReadOnly = true;
+			this->id_proc->Width = 50;
 			// 
 			// name
 			// 
@@ -281,6 +308,14 @@ namespace GulinKursOS2022 {
 			this->qty_tasks->HeaderText = L"Кол-во заданий (кроме текущего)";
 			this->qty_tasks->Name = L"qty_tasks";
 			this->qty_tasks->ReadOnly = true;
+			this->qty_tasks->Width = 62;
+			// 
+			// last_msg
+			// 
+			this->last_msg->HeaderText = L"Последнее полученное сообщение";
+			this->last_msg->Name = L"last_msg";
+			this->last_msg->ReadOnly = true;
+			this->last_msg->Width = 87;
 			// 
 			// procs_text
 			// 
@@ -294,6 +329,7 @@ namespace GulinKursOS2022 {
 			// t_queues
 			// 
 			this->t_queues->AllowUserToAddRows = false;
+			this->t_queues->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->t_queues->AutoSizeRowsMode = System::Windows::Forms::DataGridViewAutoSizeRowsMode::AllCells;
 			this->t_queues->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->t_queues->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(4) {
@@ -304,9 +340,9 @@ namespace GulinKursOS2022 {
 			this->t_queues->Name = L"t_queues";
 			this->t_queues->ReadOnly = true;
 			this->t_queues->RowHeadersVisible = false;
-			dataGridViewCellStyle2->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->t_queues->RowsDefaultCellStyle = dataGridViewCellStyle2;
-			this->t_queues->Size = System::Drawing::Size(503, 188);
+			dataGridViewCellStyle6->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->t_queues->RowsDefaultCellStyle = dataGridViewCellStyle6;
+			this->t_queues->Size = System::Drawing::Size(565, 188);
 			this->t_queues->TabIndex = 2;
 			// 
 			// id_queue
@@ -326,7 +362,7 @@ namespace GulinKursOS2022 {
 			this->msgs->HeaderText = L"Очередь сообщений";
 			this->msgs->Name = L"msgs";
 			this->msgs->ReadOnly = true;
-			this->msgs->Width = 200;
+			this->msgs->Width = 260;
 			// 
 			// qty_msgs
 			// 
@@ -336,6 +372,7 @@ namespace GulinKursOS2022 {
 			// 
 			// queues_text
 			// 
+			this->queues_text->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->queues_text->AutoSize = true;
 			this->queues_text->Location = System::Drawing::Point(12, 238);
 			this->queues_text->Name = L"queues_text";
@@ -346,16 +383,16 @@ namespace GulinKursOS2022 {
 			// interval_text
 			// 
 			this->interval_text->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->interval_text->Location = System::Drawing::Point(1010, 52);
+			this->interval_text->Location = System::Drawing::Point(1027, 52);
 			this->interval_text->Name = L"interval_text";
 			this->interval_text->Size = System::Drawing::Size(100, 20);
 			this->interval_text->TabIndex = 4;
-			this->interval_text->Text = L"1000";
+			this->interval_text->Text = L"2000";
 			// 
 			// label2
 			// 
 			this->label2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label2->Location = System::Drawing::Point(970, 36);
+			this->label2->Location = System::Drawing::Point(987, 36);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(171, 13);
 			this->label2->TabIndex = 5;
@@ -365,7 +402,7 @@ namespace GulinKursOS2022 {
 			// start
 			// 
 			this->start->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->start->Location = System::Drawing::Point(973, 78);
+			this->start->Location = System::Drawing::Point(990, 78);
 			this->start->Name = L"start";
 			this->start->Size = System::Drawing::Size(75, 26);
 			this->start->TabIndex = 6;
@@ -376,7 +413,7 @@ namespace GulinKursOS2022 {
 			// pause
 			// 
 			this->pause->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->pause->Location = System::Drawing::Point(1066, 78);
+			this->pause->Location = System::Drawing::Point(1083, 78);
 			this->pause->Name = L"pause";
 			this->pause->Size = System::Drawing::Size(75, 26);
 			this->pause->TabIndex = 7;
@@ -388,7 +425,7 @@ namespace GulinKursOS2022 {
 			// 
 			this->ticks_text->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
 			this->ticks_text->AutoSize = true;
-			this->ticks_text->Location = System::Drawing::Point(1047, 9);
+			this->ticks_text->Location = System::Drawing::Point(1064, 9);
 			this->ticks_text->Name = L"ticks_text";
 			this->ticks_text->Size = System::Drawing::Size(94, 13);
 			this->ticks_text->TabIndex = 8;
@@ -396,13 +433,12 @@ namespace GulinKursOS2022 {
 			// 
 			// log
 			// 
-			this->log->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
-				| System::Windows::Forms::AnchorStyles::Left));
+			this->log->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->log->BackColor = System::Drawing::SystemColors::MenuText;
 			this->log->Font = (gcnew System::Drawing::Font(L"Consolas", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->log->ForeColor = System::Drawing::SystemColors::Info;
-			this->log->Location = System::Drawing::Point(539, 254);
+			this->log->Location = System::Drawing::Point(598, 253);
 			this->log->Multiline = true;
 			this->log->Name = L"log";
 			this->log->ReadOnly = true;
@@ -412,8 +448,9 @@ namespace GulinKursOS2022 {
 			// 
 			// label3
 			// 
+			this->label3->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->label3->AutoSize = true;
-			this->label3->Location = System::Drawing::Point(536, 238);
+			this->label3->Location = System::Drawing::Point(595, 237);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(66, 13);
 			this->label3->TabIndex = 10;
@@ -422,6 +459,7 @@ namespace GulinKursOS2022 {
 			// t_procs_new
 			// 
 			this->t_procs_new->AllowUserToAddRows = false;
+			this->t_procs_new->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->t_procs_new->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->t_procs_new->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(2) {
 				this->name_proc_new,
@@ -445,6 +483,7 @@ namespace GulinKursOS2022 {
 			// 
 			// label4
 			// 
+			this->label4->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->label4->AutoSize = true;
 			this->label4->Location = System::Drawing::Point(12, 450);
 			this->label4->Name = L"label4";
@@ -454,6 +493,7 @@ namespace GulinKursOS2022 {
 			// 
 			// add_proc_butt
 			// 
+			this->add_proc_butt->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->add_proc_butt->Location = System::Drawing::Point(225, 514);
 			this->add_proc_butt->Name = L"add_proc_butt";
 			this->add_proc_butt->Size = System::Drawing::Size(75, 23);
@@ -465,6 +505,7 @@ namespace GulinKursOS2022 {
 			// t_tasks_new
 			// 
 			this->t_tasks_new->AllowUserToAddRows = false;
+			this->t_tasks_new->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->t_tasks_new->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->t_tasks_new->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(2) {
 				this->id_proc_task_new,
@@ -488,6 +529,7 @@ namespace GulinKursOS2022 {
 			// 
 			// label5
 			// 
+			this->label5->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->label5->AutoSize = true;
 			this->label5->Location = System::Drawing::Point(12, 563);
 			this->label5->Name = L"label5";
@@ -497,6 +539,7 @@ namespace GulinKursOS2022 {
 			// 
 			// add_task_butt
 			// 
+			this->add_task_butt->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->add_task_butt->Location = System::Drawing::Point(225, 604);
 			this->add_task_butt->Name = L"add_task_butt";
 			this->add_task_butt->Size = System::Drawing::Size(75, 23);
@@ -509,7 +552,7 @@ namespace GulinKursOS2022 {
 			// 
 			this->label1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(1028, 600);
+			this->label1->Location = System::Drawing::Point(1045, 600);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(119, 13);
 			this->label1->TabIndex = 17;
@@ -519,7 +562,7 @@ namespace GulinKursOS2022 {
 			// 
 			this->label6->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
 			this->label6->AutoSize = true;
-			this->label6->Location = System::Drawing::Point(1063, 617);
+			this->label6->Location = System::Drawing::Point(1080, 617);
 			this->label6->Name = L"label6";
 			this->label6->Size = System::Drawing::Size(84, 13);
 			this->label6->TabIndex = 18;
@@ -527,6 +570,7 @@ namespace GulinKursOS2022 {
 			// 
 			// label7
 			// 
+			this->label7->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
 			this->label7->AutoSize = true;
 			this->label7->Location = System::Drawing::Point(924, 128);
 			this->label7->Name = L"label7";
@@ -536,6 +580,7 @@ namespace GulinKursOS2022 {
 			// 
 			// id_proc_del_text
 			// 
+			this->id_proc_del_text->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
 			this->id_proc_del_text->Location = System::Drawing::Point(940, 144);
 			this->id_proc_del_text->Name = L"id_proc_del_text";
 			this->id_proc_del_text->Size = System::Drawing::Size(100, 20);
@@ -544,6 +589,7 @@ namespace GulinKursOS2022 {
 			// 
 			// ok_del_proc
 			// 
+			this->ok_del_proc->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
 			this->ok_del_proc->Location = System::Drawing::Point(1050, 142);
 			this->ok_del_proc->Name = L"ok_del_proc";
 			this->ok_del_proc->Size = System::Drawing::Size(75, 23);
@@ -554,6 +600,7 @@ namespace GulinKursOS2022 {
 			// 
 			// ok_del_task
 			// 
+			this->ok_del_task->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
 			this->ok_del_task->Location = System::Drawing::Point(1050, 193);
 			this->ok_del_task->Name = L"ok_del_task";
 			this->ok_del_task->Size = System::Drawing::Size(75, 23);
@@ -564,6 +611,7 @@ namespace GulinKursOS2022 {
 			// 
 			// task_del_text
 			// 
+			this->task_del_text->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
 			this->task_del_text->Location = System::Drawing::Point(940, 195);
 			this->task_del_text->Name = L"task_del_text";
 			this->task_del_text->Size = System::Drawing::Size(100, 20);
@@ -572,6 +620,7 @@ namespace GulinKursOS2022 {
 			// 
 			// label8
 			// 
+			this->label8->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
 			this->label8->AutoSize = true;
 			this->label8->Location = System::Drawing::Point(924, 179);
 			this->label8->Name = L"label8";
@@ -581,6 +630,7 @@ namespace GulinKursOS2022 {
 			// 
 			// label9
 			// 
+			this->label9->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
 			this->label9->Location = System::Drawing::Point(924, 219);
 			this->label9->Name = L"label9";
 			this->label9->Size = System::Drawing::Size(217, 32);
@@ -589,6 +639,7 @@ namespace GulinKursOS2022 {
 			// 
 			// groupBox1
 			// 
+			this->groupBox1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->groupBox1->Controls->Add(this->task_to_end);
 			this->groupBox1->Controls->Add(this->task_to_begin);
 			this->groupBox1->Location = System::Drawing::Point(225, 563);
@@ -619,12 +670,23 @@ namespace GulinKursOS2022 {
 			this->task_to_begin->Text = L"В начало очереди";
 			this->task_to_begin->UseVisualStyleBackColor = true;
 			// 
+			// label10
+			// 
+			this->label10->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label10->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->label10->Location = System::Drawing::Point(983, 276);
+			this->label10->Name = L"label10";
+			this->label10->Size = System::Drawing::Size(181, 209);
+			this->label10->TabIndex = 27;
+			this->label10->Text = resources->GetString(L"label10.Text");
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoScroll = true;
-			this->ClientSize = System::Drawing::Size(1153, 639);
+			this->ClientSize = System::Drawing::Size(1170, 639);
+			this->Controls->Add(this->label10);
 			this->Controls->Add(this->groupBox1);
 			this->Controls->Add(this->label9);
 			this->Controls->Add(this->ok_del_task);
@@ -670,11 +732,6 @@ namespace GulinKursOS2022 {
 
 		}
 #pragma endregion
-	public: void exec_procs() //выполнение работы процессов и вывод хода работы в лог
-	{
-
-	}
-
 	public: System::String^ gettime(void) //вернуть полную строку даты и времени в соответствии с локалью
 	{
 			time_t now = time(0); //получить метку времени по Гринвичу
@@ -718,10 +775,10 @@ namespace GulinKursOS2022 {
 				t_procs->Rows[i]->Cells[3]->Value = L"Выполнение";
 				break;
 			case WAIT:
-				t_procs->Rows[i]->Cells[3]->Value = L"Ожидание";
+				t_procs->Rows[i]->Cells[3]->Value = L"Ожидание (блокировка)";
 				break;
 			case DEL:
-				t_procs->Rows[i]->Cells[3]->Value = L"Удаление";
+				t_procs->Rows[i]->Cells[3]->Value = L"Удаление (завершение)";
 				break;
 			}
 
@@ -738,6 +795,9 @@ namespace GulinKursOS2022 {
 
 			t_procs->Rows[i]->Cells[6]->Value = Convert::ToString(procs.output(i)->get_qty_tasks());
 
+			string_ = procs.output(i)->get_last_msg_data();
+			t_procs->Rows[i]->Cells[7]->Value = gcnew System::String(string_.c_str());
+
 		}
 
 		this->procs_text->Text = PROCS_TEXT + Convert::ToString(procs.get_qty());
@@ -750,8 +810,11 @@ namespace GulinKursOS2022 {
 		while (0 != t_queues->RowCount)
 			t_queues->Rows->RemoveAt(0);
 
-		for (int i = 0, j = 0; i < msgqs.get_qty(); i++)
+		for (int i = 0; i < msgqs.get_qty(); i++)
 		{
+			t_queues->Rows->Add(); //добавить новую строку в таблицу
+			//заполнить строку таблицы
+
 			t_queues->Rows[i]->Cells[0]->Value = Convert::ToString(msgqs.output(i)->get_id());
 			t_queues->Rows[i]->Cells[1]->Value = Convert::ToString(msgqs.output(i) ->get_id_owner());
 			for (int j=0; j < msgqs.output(i)->get_qty(); j++)
@@ -761,7 +824,7 @@ namespace GulinKursOS2022 {
 			}
 
 			t_queues->Rows[i]->Cells[3]->Value = Convert::ToString(msgqs.output(i)->get_qty());
-
+			
 		}
 
 		this->queues_text->Text = QUEUES_TEXT + Convert::ToString(msgqs.get_qty());
@@ -775,6 +838,36 @@ namespace GulinKursOS2022 {
 		t_tasks_new->Rows->Add();
 		t_tasks_new->Rows[0]->Cells[0]->Value = "0";
 		t_tasks_new->Rows[0]->Cells[1]->Value = "";
+
+		//////////Пример процессов и их заданий
+		procs.add("proc1", "Алексей");
+		procs.add("proc2", "Алексей");
+		procs.add("proc3", "Алексей");
+		procs.add("proc4", "Алексей");
+
+		procs.output(0)->add_task("rsv 1 -1");
+		procs.output(0)->add_task("snd 2 1 \"2 человека\"");
+		procs.output(0)->add_task("rsv 4 1");
+		procs.output(0)->add_task("snd 3 3 \"1 человек\"");
+		procs.output(0)->add_task("finish");
+
+		procs.output(1)->add_task("rsv 2 1");
+		procs.output(1)->add_task("snd 2 2 \"солнечно\"");
+		procs.output(1)->add_task("rsv 1 5");
+		procs.output(1)->add_task("snd 4 1 \"пасмурно\"");
+		procs.output(1)->add_task("finish");
+
+		procs.output(2)->add_task("snd 1 3 \"13 мест\"");
+		procs.output(2)->add_task("snd 1 3 \"8 мест\"");
+		procs.output(2)->add_task("snd 1 5 \"13 мест\"");
+		procs.output(2)->add_task("rsv 3 3");
+		procs.output(2)->add_task("finish");
+
+		procs.output(3)->add_task("rsv 2 2");
+		procs.output(3)->add_task("finish");
+
+		refresh_t_procs(); //обновить данные в таблице с процессами
+		refresh_t_queues(); //обновить данные в таблице с очередями сообщений
 	}
 private: System::Void pause_Click(System::Object^ sender, System::EventArgs^ e) { //пауза таймера
 	this->timer_exec->Enabled = false;
@@ -784,7 +877,22 @@ private: System::Void start_Click(System::Object^ sender, System::EventArgs^ e) 
 	this->timer_exec->Enabled = true;
 }
 private: System::Void timer_exec_Tick(System::Object^ sender, System::EventArgs^ e) { //тик таймера
-	this->ticks_text->Text = TICK_TEXT + Convert::ToString(++all_ticks);
+	this->ticks_text->Text = TICK_TEXT + Convert::ToString(++all_ticks); //вывести общее число тиков
+	if (i_current_proc >= procs.get_qty()) //если все процессы пройдены, перейти к первому
+	{
+		i_current_proc = 0;
+	}
+	if (procs.get_qty() > 0) //если есть хотя бы один процесс
+	{
+		System::String^ proc_result_text = procs.output(i_current_proc)->exec(); //выполнить итерацию процесса
+		if (proc_result_text != "") //если процесс вернул не пустую строку
+		{
+			this->log->AppendText(gettime() + proc_result_text + "\r\n"); //записать результат в лог
+		}
+		i_current_proc++; //перейти к сл. процессу
+	}
+	refresh_t_procs(); //обновить данные в таблице с процессами
+	refresh_t_queues(); //обновить данные в таблице с очередями сообщений
 }
 private: System::Void add_task_butt_Click(System::Object^ sender, System::EventArgs^ e) { //добавить задание
 	int int_id_proc_task_new = Convert::ToDouble((t_tasks_new->Rows[0]->Cells[0]->Value)->ToString());
