@@ -182,8 +182,8 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ last_msg;
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
-			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle5 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle6 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle2 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Form1::typeid));
 			this->timer_exec = (gcnew System::Windows::Forms::Timer(this->components));
 			this->t_procs = (gcnew System::Windows::Forms::DataGridView());
@@ -259,8 +259,8 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ last_msg;
 			this->t_procs->Name = L"t_procs";
 			this->t_procs->ReadOnly = true;
 			this->t_procs->RowHeadersVisible = false;
-			dataGridViewCellStyle5->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->t_procs->RowsDefaultCellStyle = dataGridViewCellStyle5;
+			dataGridViewCellStyle1->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->t_procs->RowsDefaultCellStyle = dataGridViewCellStyle1;
 			this->t_procs->Size = System::Drawing::Size(903, 193);
 			this->t_procs->TabIndex = 0;
 			// 
@@ -340,8 +340,8 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ last_msg;
 			this->t_queues->Name = L"t_queues";
 			this->t_queues->ReadOnly = true;
 			this->t_queues->RowHeadersVisible = false;
-			dataGridViewCellStyle6->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->t_queues->RowsDefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle2->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->t_queues->RowsDefaultCellStyle = dataGridViewCellStyle2;
 			this->t_queues->Size = System::Drawing::Size(565, 188);
 			this->t_queues->TabIndex = 2;
 			// 
@@ -732,7 +732,7 @@ private: System::Windows::Forms::DataGridViewTextBoxColumn^ last_msg;
 
 		}
 #pragma endregion
-	public: System::String^ gettime(void) //вернуть полную строку даты и времени в соответствии с локалью
+	public: System::String^ gettime(void) //получить строку текущего времени
 	{
 			time_t now = time(0); //получить метку времени по Гринвичу
 			struct tm timeinfo;
